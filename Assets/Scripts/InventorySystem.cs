@@ -1,35 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class InventorySystem : MonoBehaviour
 {
-    private List<char> collectedLetters = new List<char>(); // List that stores new letters
+    public TextMeshProUGUI noteText; // Reference to display on the notebook
+    private List<char> learnedLetters = new List<char>(); // List that stores new letters
 
-    //function that adds letters to inv
+    // Function that adds letters to inventory
     public void AddLetter(char letter)
     {
-        if (!collectedLetters.Contains(letter))
+        if (!learnedLetters.Contains(letter))
         {
-            collectedLetters.Add(letter);
+            learnedLetters.Add(letter);
+            UpdateNoteDisplay(); // Refresh notebook to reflect new findings
             Debug.Log($"New letter: {letter}");
         }
-        
         else
         {
             Debug.Log($"Letter '{letter}' is already in inv");
         }
     }
 
-    public void DisplayInventory()
+    // Function to update the notebook display
+    public void UpdateNoteDisplay()
     {
-        string inventoryContent = "Collected Letters: ";
-        foreach (char letter in collectedLetters)
-        {
-            inventoryContent += $"{letter}";
-        }
-        Debug.Log(inventoryContent);
+        string displayText = string.Join(", ", learnedLetters);
+        noteText.text = $"Learned letters:\n{displayText}";
     }
-
-
 }

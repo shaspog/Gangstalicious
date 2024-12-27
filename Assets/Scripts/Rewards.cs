@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Rewards : MonoBehaviour
 {
-    public InventorySystem letterInventory; //ref to inv
-    public char rewardLetter; // what letter is given as a reward. Change later into a list?? multiple letters
+    public LetRewards letRewards; //reference to the letter manager
 
-    public void CompleteTask()
+    public void FinishedTask()
     {
-        if (letterInventory != null)
+        if (letRewards != null)
         {
-            letterInventory.AddLetter(rewardLetter);
-            Debug.Log($"Task finished: {rewardLetter}");
+            letRewards.FinishedTask();
+        }
+
+        else
+        {
+            Debug.LogError("No letManager present");
         }
     }
 }
