@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,13 +23,27 @@ public class TranslationManager : MonoBehaviour
         "evening",
     };
 
-    public static List<string> GetAvailableWords()
+    public static List<string> GetWordsToTranslate()
+    {
+        return wordsToTranslate;
+    }
+
+    public static List<string> GetTranslatedWords()
     {
         return wordsTranslated;
     }
 
     void Start()
     {
+        EventManager.AddListener<TranslateEvent>(WordTranslated);
+    }
+
+    private void WordTranslated(TranslateEvent evt)
+    {
+        if (wordsToTranslate.Contains(evt.OldWord))
+            wordsToTranslate.Remove(evt.OldWord);
         
+        if (wordsTranslated.Contains(evt.NewWord))
+            wordsTranslated.Remove(evt.NewWord);
     }
 }

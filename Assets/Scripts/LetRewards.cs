@@ -6,9 +6,6 @@ public class LetRewards : MonoBehaviour
     private List<string> availableWords;
     // private int lettersPerTask;
 
-    private string oldWord;
-    private string newWord;
-
     void Start()
     {
         // availableWords = TranslationManager.GetAvailableWords();
@@ -17,7 +14,7 @@ public class LetRewards : MonoBehaviour
 
     public void FinishedTask()
     {
-        if (TranslationManager.GetAvailableWords().Count <= 0)  return;
+        if (TranslationManager.GetTranslatedWords().Count <= 0)  return;
 
         // if (availableWords.Count == 0)
         // {
@@ -45,10 +42,12 @@ public class LetRewards : MonoBehaviour
         //     EventManager.Broadcast(evt);
         // }
 
+        var randIndex = Random.Range(0, TranslationManager.GetTranslatedWords().Count);
+
         TranslateEvent evt = new()
         {
-            OldWord = oldWord,
-            NewWord = newWord
+            OldWord = TranslationManager.GetWordsToTranslate()[randIndex],
+            NewWord = TranslationManager.GetTranslatedWords()[randIndex]
         };
         EventManager.Broadcast(evt);
 

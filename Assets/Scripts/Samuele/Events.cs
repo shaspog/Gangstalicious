@@ -3,13 +3,7 @@
 
 public static class Events
 {
-    public static AddWordToInventory AddWordToInventory = new();
     public static TranslateEvent TranslateEvent = new();
-}
-
-public class AddWordToInventory : GameEvent
-{
-    public string Word;
 }
 
 public class TranslateEvent : GameEvent

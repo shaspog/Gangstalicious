@@ -9,21 +9,21 @@ public class InventorySystem : MonoBehaviour
 
     void Start()
     {
-        EventManager.AddListener<AddWordToInventory>(AddWord);
+        EventManager.AddListener<TranslateEvent>(AddWord);
     }
 
     // Function that adds words to inventory
-    private void AddWord(AddWordToInventory evt)
+    private void AddWord(TranslateEvent evt)
     {
-        if (!learnedWords.Contains(evt.Word))
+        if (!learnedWords.Contains(evt.NewWord))
         {
-            learnedWords.Add(evt.Word);
+            learnedWords.Add(evt.NewWord);
             UpdateNoteDisplay(); // Refresh notebook to reflect new findings
-            Debug.Log($"New word: {evt.Word}");
+            Debug.Log($"New word: {evt.NewWord}");
         }
         else
         {
-            Debug.Log($"Word '{evt.Word}' is already in inv");
+            Debug.Log($"Word '{evt.NewWord}' is already in inv");
         }
     }
 
