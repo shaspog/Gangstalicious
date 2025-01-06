@@ -29,4 +29,9 @@ public class InventorySystem : MonoBehaviour
         string displayText = string.Join(", ", learnedLetters);
         noteText.text = $"Learned letters:\n{displayText}";
     }
+
+    public List<char> GetLearnedLetters()
+    {
+        return learnedLetters;
+    }
 }
