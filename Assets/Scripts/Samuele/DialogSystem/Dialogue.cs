@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class Dialogue : MonoBehaviour
@@ -15,23 +16,23 @@ public class Dialogue : MonoBehaviour
     private bool isTalking = false;
     private bool isStoppedTalking = false;
 
-    void OnValidate()
+    void Start()
     {
-        if (dialogues == null || dialogues.Length == 0)  return;
+        EventManager.AddListener<TranslateEvent>(TranslateMessage);
+    }
 
-        if (dialogues[0].needsPrevious)
+    void TranslateMessage(TranslateEvent evt)
+    {
+        for (int i = 0; i < dialogues.Count() - 1; i++)
         {
-            Debug.LogWarning("Thats the wrong one my guy");
-            dialogues[0] = null;
-            return;
-        }
-        
-        for (int i = 1; i < dialogues.Length - 1; i++)
-            if (!dialogues[i].needsPrevious)
+            for (int j = 0; j < dialogues[i].lines.Count() - 1; i++)
             {
-                Debug.LogWarning("Thats the wrong one my guy");
-                dialogues[i] = null;
+                var line = dialogues[i].lines[j];
+
+                if (line.Contains(evt.OldWord))
+                    line.Replace(evt.OldWord, evt.NewWord);
             }
+        }
     }
 
     void Update()

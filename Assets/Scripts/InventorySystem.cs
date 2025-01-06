@@ -1,37 +1,41 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class InventorySystem : MonoBehaviour
 {
-    public TextMeshProUGUI noteText; // Reference to display on the notebook
-    private List<char> learnedLetters = new List<char>(); // List that stores new letters
+    [SerializeField] private TextMeshProUGUI noteText; // Reference to display on the notebook
+    private List<string> learnedWords = new(); // List that stores new words
 
-    // Function that adds letters to inventory
-    public void AddLetter(char letter)
+    void Start()
     {
-        if (!learnedLetters.Contains(letter))
+        EventManager.AddListener<AddWordToInventory>(AddWord);
+    }
+
+    // Function that adds words to inventory
+    private void AddWord(AddWordToInventory evt)
+    {
+        if (!learnedWords.Contains(evt.Word))
         {
-            learnedLetters.Add(letter);
+            learnedWords.Add(evt.Word);
             UpdateNoteDisplay(); // Refresh notebook to reflect new findings
-            Debug.Log($"New letter: {letter}");
+            Debug.Log($"New word: {evt.Word}");
         }
         else
         {
-            Debug.Log($"Letter '{letter}' is already in inv");
+            Debug.Log($"Word '{evt.Word}' is already in inv");
         }
     }
 
     // Function to update the notebook display
     public void UpdateNoteDisplay()
     {
-        string displayText = string.Join(", ", learnedLetters);
+        string displayText = string.Join(", ", learnedWords);
         noteText.text = $"Learned letters:\n{displayText}";
     }
 
-    public List<char> GetLearnedLetters()
+    public List<string> GetLearnedWords()
     {
-        return learnedLetters;
+        return learnedWords;
     }
 }

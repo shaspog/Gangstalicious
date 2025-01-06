@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,14 +8,14 @@ public class TranslationSystem : MonoBehaviour
 
     public string TranslateMessage(string message)
     {
-        List<char> knownLetters = inventorySystem.GetLearnedLetters();
+        List<string> knownWords = inventorySystem.GetLearnedWords();
         char[] translatedMessage = new char[message.Length];
 
         for (int i = 0; i < message.Length; i++)
         {
             char currentChar = message[i];
 
-            if (char.IsLetter(currentChar) && knownLetters.Contains(currentChar))
+            if (char.IsLetter(currentChar) && knownWords.Contains(""))
             {
                 translatedMessage[i] = currentChar; // keeps the learned letters
             }
