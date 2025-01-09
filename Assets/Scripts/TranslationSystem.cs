@@ -1,21 +1,22 @@
+/*
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TranslationSystem : MonoBehaviour
 {
     public InventorySystem inventorySystem;
-    public char unknownSymbol = '?';
+    public char unknownSymbol = '?';        
 
     public string TranslateMessage(string message)
     {
-        List<string> knownWords = inventorySystem.GetLearnedWords();
+        List<string> knownLetters = inventorySystem.GetLearnedLetters();
         char[] translatedMessage = new char[message.Length];
 
         for (int i = 0; i < message.Length; i++)
         {
             char currentChar = message[i];
 
-            if (char.IsLetter(currentChar) && knownWords.Contains(""))
+            if (knownLetters.Contains(currentChar))
             {
                 translatedMessage[i] = currentChar; // keeps the learned letters
             }
@@ -31,3 +32,4 @@ public class TranslationSystem : MonoBehaviour
         return new string(translatedMessage);
     }
 }
+*/
