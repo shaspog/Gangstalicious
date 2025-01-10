@@ -362,6 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07bc8b880efce24f8f12eb4797bcc78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteText: {fileID: 0}
 --- !u!114 &1132374174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,8 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be4af636a7765b94ab674394bc8ec27e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  letterInventory: {fileID: 1132374173}
-  rewardLetter: 77
+  letRewards: {fileID: 0}
 --- !u!4 &1132374175
 Transform:
   m_ObjectHideFlags: 0

@@ -37,6 +37,8 @@ public class Dialogue : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.M))
+            StartDialogue();
         if (!wait && !isTalking)
             StartCoroutine(CheckForDialogue());
     }
