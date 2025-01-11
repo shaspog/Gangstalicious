@@ -4,38 +4,76 @@ using TMPro;
 
 public class InventorySystem : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI noteText; // Reference to display on the notebook
-    private List<string> learnedWords = new(); // List that stores new words
+    [SerializeField] private TextMeshProUGUI noteText; // ref for notebook
+    [SerializeField] private char unknownSymbol = '?';
+
+    private HashSet<char> learnedLetters = new();
+    private string currentAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     void Start()
     {
-        EventManager.AddListener<TranslateEvent>(AddWord);
+        EventManager.AddListener<TranslateEvent>(AddLetter);
+        UpdateNoteDisplay();
     }
 
-    // Function that adds words to inventory
-    private void AddWord(TranslateEvent evt)
+    // add letters to the notebook
+    public void AddLetter(TranslateEvent evt)
     {
-        if (!learnedWords.Contains(evt.NewWord))
+        foreach (char letter in evt.NewWord.ToUpper())
         {
-            learnedWords.Add(evt.NewWord);
-            UpdateNoteDisplay(); // Refresh notebook to reflect new findings
-            Debug.Log($"New word: {evt.NewWord}");
+            learnedLetters.Add(letter);
+            Debug.Log($"Learned new letter: {letter}"); // replace with UI pop in future
         }
-        else
-        {
-            Debug.Log($"Word '{evt.NewWord}' is already in inv");
-        }
+        UpdateNoteDisplay();
     }
 
-    // Function to update the notebook display
+    // update notebook with learned letters
     public void UpdateNoteDisplay()
     {
-        string displayText = string.Join(", ", learnedWords);
-        noteText.text = $"Learned letters:\n{displayText}";
+        string displayText = $"Learned letters:\n";
+
+        foreach (char letter in currentAlphabet)
+        {
+            if (learnedLetters.Contains(letter))
+            {
+                displayText += $"{letter}";
+            }
+            else
+            {
+                displayText += $"{unknownSymbol}";
+            }
+        }
+        noteText.text = displayText.Trim();
     }
 
-    public List<string> GetLearnedWords()
+    // methdo to find learned letters
+    public HashSet<char> GetLearnedLetters()
     {
-        return learnedWords;
+        return learnedLetters;
+    }
+
+    // method to translate message based on learned letters
+    public string TranslateMessage(string message)
+    {
+        char[] translatedMessage = new char[message.Length];
+
+        for (int i = 0; i < message.Length; i++)
+        {
+            char currentChar = message[i];
+
+            if (learnedLetters.Contains(char.ToUpper(currentChar)))
+            {
+                translatedMessage[i] = currentChar;
+            }
+            else if (char.IsWhiteSpace(currentChar) || char.IsPunctuation(currentChar))
+            {
+                translatedMessage[i] = currentChar;
+            }
+            else
+            {
+                translatedMessage[i] = unknownSymbol;
+            }
+        }
+        return new string(translatedMessage);
     }
 }

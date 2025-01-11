@@ -3,54 +3,58 @@ using UnityEngine;
 
 public class LetRewards : MonoBehaviour
 {
-    private List<string> availableWords;
-    // private int lettersPerTask;
-
+    public InventorySystem inventorySystem;
+    private HashSet<char> availableLetters;  // Set of available letters to reward
+    private int lettersPerTask = 3; // number of letters rewarded per task
     void Start()
     {
-        // availableWords = TranslationManager.GetAvailableWords();
-        // lettersPerTask = availableWords.Count / 3; //Divide by number of tasks
+        inventorySystem = FindObjectOfType<InventorySystem>();
+        availableLetters = new HashSet<char>("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 
     public void FinishedTask()
     {
-        if (TranslationManager.GetTranslatedWords().Count <= 0)  return;
+        // find learned letters from inv
+        HashSet<char> learnedLetters = inventorySystem.GetLearnedLetters();  
 
-        // if (availableWords.Count == 0)
-        // {
-        //     Debug.Log("no letters left to reward");
-        //     return;
-        // }    
+        // get not learned letters
+        HashSet<char> remainingLetters = new HashSet<char>(availableLetters);
+        remainingLetters.ExceptWith(learnedLetters);
 
-        // //randomzier
-        // var taskWords = availableWords
-        //     .OrderBy(x => Random.value)
-        //     .Take(lettersPerTask)
-        //     .ToList();
-
-        // foreach (var word in taskWords)
-        // {
-        //     availableWords.Remove(word); //remove learned letters
-        // }
-
-        // foreach (var word in taskWords)
-        // {
-        //     AddWordToInventory evt = new()
-        //     {
-        //         Word = word
-        //     };
-        //     EventManager.Broadcast(evt);
-        // }
-
-        var randIndex = Random.Range(0, TranslationManager.GetTranslatedWords().Count);
-
-        TranslateEvent evt = new()
+        if (remainingLetters.Count == 0)
         {
-            OldWord = TranslationManager.GetWordsToTranslate()[randIndex],
-            NewWord = TranslationManager.GetTranslatedWords()[randIndex]
-        };
-        EventManager.Broadcast(evt);
+            Debug.Log("No letters left to reward");
+            return;
+        }
 
-        // Debug.Log($"task done rewards: {string.Join(",", taskWords)}");
+        // randomize the remaining letters and pick a few
+        List<char> lettersToReward = new List<char>(remainingLetters);
+        int rewardCount = Mathf.Min(lettersPerTask, lettersToReward.Count);  
+
+        // rng letter reward
+        List<char> rewardedLetters = new List<char>();
+        for (int i = 0; i < rewardCount; i++)
+        {
+            int randIndex = Random.Range(0, lettersToReward.Count);
+            char letter = lettersToReward[randIndex];
+            lettersToReward.RemoveAt(randIndex);  // no duplicates
+            rewardedLetters.Add(letter);
+        }
+
+        foreach (char letter in rewardedLetters)
+        {
+            TranslateEvent evt = new()
+            {
+                OldWord = letter.ToString(),
+                NewWord = letter.ToString()
+            };
+
+            // add the letter to the inventory
+            inventorySystem.AddLetter(evt);
+
+            EventManager.Broadcast(evt);
+        }
+
+        Debug.Log($"Task completed! Rewarded letters: {string.Join(", ", rewardedLetters)}");
     }
 }

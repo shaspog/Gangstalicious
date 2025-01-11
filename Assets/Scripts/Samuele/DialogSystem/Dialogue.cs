@@ -16,21 +16,25 @@ public class Dialogue : MonoBehaviour
     private bool isTalking = false;
     private bool isStoppedTalking = false;
 
+    public InventorySystem inventorySystem;
+
     void Start()
     {
+        inventorySystem = FindObjectOfType<InventorySystem>();
         EventManager.AddListener<TranslateEvent>(TranslateMessage);
     }
 
     void TranslateMessage(TranslateEvent evt)
     {
-        for (int i = 0; i < dialogues.Count() - 1; i++)
+        for (int i = 0; i < dialogues.Count(); i++)
         {
-            for (int j = 0; j < dialogues[i].lines.Count() - 1; i++)
+            for (int j = 0; j < dialogues[i].lines.Count(); j++)
             {
-                var line = dialogues[i].lines[j];
-
-                if (line.Contains(evt.OldWord))
-                    line.Replace(evt.OldWord, evt.NewWord);
+                string line = dialogues[i].lines[j];
+             
+                string translatedLine = inventorySystem.TranslateMessage(line);
+                
+                dialogues[i].lines[j] = translatedLine;
             }
         }
     }
@@ -46,11 +50,13 @@ public class Dialogue : MonoBehaviour
     private IEnumerator CheckForDialogue()
     {
         wait = true;
-        
+
         if (Physics.SphereCast(transform.position, 10, Vector3.zero, out RaycastHit hitInfo))
+        {
             if (hitInfo.collider.CompareTag("Player"))
                 StartDialogue();
-        
+        }
+
         yield return new WaitForSeconds(0.05f);
         wait = false;
     }
@@ -66,9 +72,10 @@ public class Dialogue : MonoBehaviour
 
     private IEnumerator TypeLine()
     {
-        foreach (string lines in dialogues[dialogueIndex].lines)
+       foreach (string rawLine in dialogues[dialogueIndex].lines)
         {
-            foreach(char c in lines.ToCharArray())
+            string translatedLine = inventorySystem.TranslateMessage(rawLine);
+            foreach (char c in translatedLine.ToCharArray())
             {
                 yield return new WaitForSeconds(waitType);
             }
@@ -76,8 +83,6 @@ public class Dialogue : MonoBehaviour
 
         if (!dialogues[dialogueIndex].needsAnswer)
             NextLine();
-        // else
-            // Do Wait for the answer
     }
 
     void NextLine()
@@ -88,7 +93,7 @@ public class Dialogue : MonoBehaviour
             StartCoroutine(StopTalking());
     }
 
-    IEnumerator StopTalking()
+    private IEnumerator StopTalking()
     {
         isStoppedTalking = true;
 
