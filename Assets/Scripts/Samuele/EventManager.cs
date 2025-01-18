@@ -1,58 +1,24 @@
-using System;
-using System.Collections.Generic;
-
-public class GameEvent
-{
-}
+using UnityEngine;
+using UnityEngine.Events;
 
 // A simple Event System that can be used for remote systems communication
-public static class EventManager
+public class EventManager : MonoBehaviour
 {
-    static readonly Dictionary<Type, Action<GameEvent>> s_Events = new Dictionary<Type, Action<GameEvent>>();
+    // Game Events
+    public static UnityAction<string, string> TranslateEvent;
+    public static UnityAction<int> RewardEvent;
 
-    static readonly Dictionary<Delegate, Action<GameEvent>> s_EventLookups =
-        new Dictionary<Delegate, Action<GameEvent>>();
-
-    public static void AddListener<T>(Action<T> evt) where T : GameEvent
+    // Fire translation event
+    // parameters are the word to translate and its translation
+    public static void FireTranslateEvent(string oldWord, string newWord)
     {
-        if (!s_EventLookups.ContainsKey(evt))
-        {
-            Action<GameEvent> newAction = (e) => evt((T) e);
-            s_EventLookups[evt] = newAction;
-
-            if (s_Events.TryGetValue(typeof(T), out Action<GameEvent> internalAction))
-                s_Events[typeof(T)] = internalAction += newAction;
-            else
-                s_Events[typeof(T)] = newAction;
-        }
+        TranslateEvent?.Invoke(oldWord, newWord);
     }
 
-    public static void RemoveListener<T>(Action<T> evt) where T : GameEvent
+    // Fire reward event
+    // parameter is index for the translation list
+    public static void FireRewardEvent(int index)
     {
-        if (s_EventLookups.TryGetValue(evt, out var action))
-        {
-            if (s_Events.TryGetValue(typeof(T), out var tempAction))
-            {
-                tempAction -= action;
-                if (tempAction == null)
-                    s_Events.Remove(typeof(T));
-                else
-                    s_Events[typeof(T)] = tempAction;
-            }
-
-            s_EventLookups.Remove(evt);
-        }
-    }
-
-    public static void Broadcast(GameEvent evt)
-    {
-        if (s_Events.TryGetValue(evt.GetType(), out var action))
-            action.Invoke(evt);
-    }
-
-    public static void Clear()
-    {
-        s_Events.Clear();
-        s_EventLookups.Clear();
+        RewardEvent?.Invoke(index);
     }
 }

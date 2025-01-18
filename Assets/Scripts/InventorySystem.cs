@@ -12,14 +12,15 @@ public class InventorySystem : MonoBehaviour
 
     void Start()
     {
-        EventManager.AddListener<TranslateEvent>(AddLetter);
+        EventManager.TranslateEvent += AddLetter;
+        // EventManager.AddListener<TranslateEvent>(AddLetter);
         UpdateNoteDisplay();
     }
 
     // add letters to the notebook
-    public void AddLetter(TranslateEvent evt)
+    public void AddLetter(string oldWord, string newWord)
     {
-        foreach (char letter in evt.NewWord.ToUpper())
+        foreach (char letter in newWord.ToUpper())
         {
             learnedLetters.Add(letter);
             Debug.Log($"Learned new letter: {letter}"); // replace with UI pop in future
@@ -43,7 +44,7 @@ public class InventorySystem : MonoBehaviour
                 displayText += $"{unknownSymbol}";
             }
         }
-        noteText.text = displayText.Trim();
+        // noteText.text = displayText.Trim();
     }
 
     // methdo to find learned letters

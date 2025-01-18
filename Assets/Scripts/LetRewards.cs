@@ -43,16 +43,7 @@ public class LetRewards : MonoBehaviour
 
         foreach (char letter in rewardedLetters)
         {
-            TranslateEvent evt = new()
-            {
-                OldWord = letter.ToString(),
-                NewWord = letter.ToString()
-            };
-
-            // add the letter to the inventory
-            inventorySystem.AddLetter(evt);
-
-            EventManager.Broadcast(evt);
+            EventManager.FireTranslateEvent(letter.ToString(), letter.ToString());
         }
 
         Debug.Log($"Task completed! Rewarded letters: {string.Join(", ", rewardedLetters)}");
