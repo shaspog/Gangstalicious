@@ -19,7 +19,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // Set up player position
         var splineStartPoint = splines[splineIndex][moveIndex].Position;
-        transform.position = new Vector3(splineStartPoint.x, 1, splineStartPoint.z);
+        transform.position = new Vector3(splineStartPoint.x, 1.25f, splineStartPoint.z);
+
+        transform.forward = splines[splineIndex][moveIndex + 1].Position - splineStartPoint;
 
         CheckForMovement();
     }
@@ -89,8 +91,9 @@ public class PlayerMovement : MonoBehaviour
     public void MoveInSpline(int knot)
     {
         moveIndex += knot;
-
-        transform.position = splines[splineIndex][moveIndex].Position;
+        
+        var splineStartPoint = splines[splineIndex][moveIndex].Position;
+        transform.position = new Vector3(splineStartPoint.x, 1.25f, splineStartPoint.z);
 
         CheckForMovement();
     }

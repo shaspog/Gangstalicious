@@ -21,6 +21,7 @@ public class DirectionArrows : MonoBehaviour
     void Update()
     {
         thisCanvas.transform.position = playerMovement.gameObject.transform.position;
+        thisCanvas.transform.position += new Vector3(0, -.25f, 0);
 
         var currentSpline = playerMovement.GetCurrentSpline();
         var currentIndex = playerMovement.GetCurrentIndex();
@@ -28,6 +29,8 @@ public class DirectionArrows : MonoBehaviour
         thisCanvas.transform.forward = currentIndex + 1 > currentSpline.Count ?
             currentSpline[currentIndex].Position - currentSpline[currentIndex - 1].Position :
             currentSpline[currentIndex + 1].Position - currentSpline[currentIndex].Position;
+        
+        thisCanvas.transform.rotation = Quaternion.Euler(90, -90, 0);
         
         if (playerMovement.canMoveForward)
             arrowUp.SetActive(true);
@@ -40,13 +43,7 @@ public class DirectionArrows : MonoBehaviour
             arrowDown.SetActive(false);
     }
 
-    private void MoveForward()
-    {
-        playerMovement.MoveInSpline(1);
-    }
+    private void MoveForward() => playerMovement.MoveInSpline(1);
 
-    private void MoveBackward()
-    {
-        playerMovement.MoveInSpline(-1);
-    }
+    private void MoveBackward() => playerMovement.MoveInSpline(-1);
 }
