@@ -108591,14 +108591,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveGestureDetector: {fileID: 176705951}
   thumbsUpGestureCheck: {fileID: 21339198}
-  pinchGestureCheck: {fileID: 0}
-  peaceGestureCheck: {fileID: 0}
+  pinchGestureCheck: {fileID: 21339198}
+  peaceGestureCheck: {fileID: 21339198}
   greetingMessage: H***o!
   waveMessage: W**l* yo* lik* a ho**d*g?
   thumbsUpMessage: G**d, i* w**l t*k* j*s* a se***nd*.
   nextMessage: H*r* y** *o! I* wi** b* 6.00
   pinchMessage: T*n** y*u!
-  peaceMessage: P*c* an* *ove!
+  peaceMessage: P*ce an* *ove!
   dialogueText: {fileID: 1288888864}
 --- !u!4 &2110499188 stripped
 Transform:
