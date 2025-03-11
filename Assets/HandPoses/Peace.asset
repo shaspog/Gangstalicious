@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cfe1df7ed391a24fbe2a2d275e81b06, type: 3}
-  m_Name: New Shape Recognizer
+  m_Name: Peace
   m_EditorClassIdentifier: 
   _shapeName: Peace
   _thumbFeatureConfigs:
